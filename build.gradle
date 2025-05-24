@@ -4,7 +4,7 @@ plugins {
     id("maven-publish")
 }
 
-group = 'com.ggar' 
+group = 'com.github.g-gar'
 version = '5.10.2-SNAPSHOT'
 
 repositories {
@@ -45,7 +45,7 @@ publishing {
             from components.java
             artifact shadowJar
             pom {
-                groupId = 'com.github.g-gar' // O 'com.github.g-gar'
+                groupId = 'com.github.g-gar'
             }
         }
     }
