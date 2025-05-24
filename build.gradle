@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.github.g-gar'
-version = '5.10.2'
+version = '5.10.2-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -44,8 +44,9 @@ publishing {
         gpr(MavenPublication) {
             from components.java
             artifact shadowJar
+
             pom {
-                groupId = 'com.github.g-gar'
+                packaging = 'jar'
             }
         }
     }
