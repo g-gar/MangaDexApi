@@ -1,0 +1,63 @@
+plugins {
+    id 'java'
+    // Aplicar el plugin shadow para crear un "fat JAR"
+    // Actualizado al nuevo group ID de GradleUp
+    id 'com.gradleup.shadow' version '8.3.5' // Versión actual del plugin shadow bajo GradleUp
+}
+
+group = 'com.ggar' // Puedes cambiar esto si lo necesitas
+version = '3.0.3-SNAPSHOT' // Puedes cambiar esto si lo necesitas
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Jackson para el manejo de JSON
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.1' // Usando una versión estable más común de Jackson
+
+    // Jakarta Annotation API (si es necesaria, por ejemplo para @Nullable, @Nonnull)
+    // Si solo usas @Nullable de un paquete específico, puedes ser más selectivo.
+    // Para el código que hemos estado viendo, javax.annotation.Nullable fue usado,
+    // pero jakarta.annotation-api es el sucesor en el espacio de nombres Jakarta EE.
+    // Si tu @Nullable es de otra librería (como JetBrains), esta dependencia podría no ser necesaria
+    // o podrías necesitar otra. Para el código actual, parece que no se usa explícitamente una anotación
+    // que requiera esta dependencia específica, pero la mantendré si la necesitas para otras partes.
+    implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1' // Versión común y estable
+
+    // Java HTTP Client está incluido en el JDK 11+, no necesita dependencia explícita.
+    // java.util.logging está incluido en el JDK, no necesita dependencia.
+}
+
+// Configuración para el plugin shadowJar
+shadowJar {
+    archiveClassifier.set('') // Evita añadir '-all' o '-shadow' al nombre del JAR final por defecto
+    // Si quieres un clasificador, puedes configurarlo así: archiveClassifier.set('all')
+    // Esto generaría tuLibreria-1.0-SNAPSHOT-all.jar
+
+    // Opcional: Si necesitas fusionar archivos de servicio (como para SPI)
+    // mergeServiceFiles()
+}
+
+// Asegurarse de que la tarea 'build' dependa de 'shadowJar'
+// para que el fat JAR se genere al ejecutar 'gradle build'
+// La tarea 'assemble' ya incluye 'shadowJar' por defecto con el plugin shadow.
+// Si quieres que 'jar' produzca el fat jar directamente (y no el thin jar):
+jar {
+    enabled = false // Deshabilitar la tarea 'jar' estándar para evitar confusión con el thin JAR
+}
+// La tarea 'shadowJar' producirá el JAR que necesitas.
+// Puedes construirlo con: ./gradlew shadowJar
+// O con: ./gradlew build (que también ejecutará shadowJar)
+
+// Opcional: Configurar el manifest del JAR si es necesario (ej. para un Main-Class si fuera ejecutable)
+// tasks.withType(com.gradleup.shadow.tasks.ShadowJar) { // Actualizado el tipo de la tarea
+//    manifest {
+//        attributes 'Main-Class': 'com.tu.paquete.ClasePrincipal' // Solo si tu JAR es ejecutable
+//    }
+// }
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11 // Asumiendo Java 11+ por HttpClient
+    targetCompatibility = JavaVersion.VERSION_11
+}
