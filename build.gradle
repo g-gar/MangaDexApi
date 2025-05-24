@@ -4,8 +4,8 @@ plugins {
     id("maven-publish")
 }
 
-group = 'com.github.g-gar'
-version = '5.10.2'
+group = 'g-gar'
+version = '5.10.2-SNAPSHOT'
 
 repositories {
     mavenCentral()
