@@ -31,7 +31,7 @@ jobs:
         run: chmod +x gradlew 
 
       - name: Publish package
-        run: ./gradlew clean build shadowJar publish
+        run: ./gradlew clean build publish
         env:
           USERNAME: ${{ github.actor }}
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
